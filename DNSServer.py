@@ -54,7 +54,6 @@ input_string = 'AlwaysWatching'
 
 encrypted_value = encrypt_with_aes(
     input_string, password, salt)  # exfil function
-encrypted_txt_value = base64.b64encode(encrypted_value).decode('utf-8')
 decrypted_value = decrypt_with_aes(
     encrypted_value, password, salt)  # exfil function
 
@@ -65,7 +64,6 @@ def generate_sha256_hash(input_string):
     sha256_hash = hashlib.sha256()
     sha256_hash.update(input_string.encode('utf-8'))
     return sha256_hash.hexdigest()
-
 
 # A dictionary containing DNS records mapping hostnames to different types of DNS data.
 dns_records = {
@@ -103,7 +101,7 @@ dns_records = {
     },
     'nyu.edu.': {
         dns.rdatatype.A: '192.168.1.106',
-        dns.rdatatype.TXT: (encrypted_txt_value,),
+        dns.rdatatype.TXT: (encrypted_value.decode('utf-8'),),
         dns.rdatatype.MX: [(10, 'mxa-00256a01.gslb.pphosted.com.')],
         dns.rdatatype.AAAA: '2001:0db8:85a3:0000:0000:8a2e:0373:7312',
         dns.rdatatype.NS: 'ns1.nyu.edu.',
